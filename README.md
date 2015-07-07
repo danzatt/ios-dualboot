@@ -4,7 +4,7 @@ __Note:__ *if you are going to build the tools yourself you will need to have a 
 1. **GPT fdisk**  
 To resize **G**UID **P**artition **T**able we will be needing GPT fdisk.  
 `git clone git://git.code.sf.net/p/gptfdisk/code gptfdisk-code && cd gptfdisk-code`  
-`wget <fdisk patch link> -O gptfdisk.patch`  
+`wget https://gist.githubusercontent.com/danzatt/190544d85b2ae80cf986/raw/ba6b64e692651ec54a273cca7760ffdc2f24e7d1/gptfdisk.patch -O gptfdisk.patch`  
 Since  iOS uses weird revision we must patch gpt.cc (+ Theos makefile & control)  
 `patch -p1 < gptfdisk.patch`  
 Link your Theos installation e.g. `ln -s /opt/theos theos` and `make package install`.
