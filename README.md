@@ -142,7 +142,7 @@ Using 4
 First sector (1292294-1947651, default = 1292294) or {+-}size{KMGTP}:
 ```
 
-Theoretically you could keep the last sector default (as that's the LBA = last usable block/sector specified by the GPT itself) but a few LwVM seemed to complain about it being out of rage so you better subtract e.g. 2 blocks from the default last sector:
+Theoretically you could keep the last sector default (as that's the LBA = last usable block/sector specified by the GPT itself) but a LwVM seemed to complain about it being out of rage so you better subtract ~2 blocks from the default last sector:
 ```
 Last sector (1292294-1947651, default = 1947651) or {+-}size{KMGTP}:
 ```
