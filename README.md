@@ -1,6 +1,7 @@
 Obtaining tools
 ============
 __Note:__ *if you are going to build the tools yourself you will need to have a [Theos](http://www.iphonedevwiki.net/index.php/Theos) set up. If you are on __OS X__ you need to have Xcode installed and follow [the guide on iPhone Dev Wiki](http://www.iphonedevwiki.net/index.php/Theos/Setup#Installing_Theos). If you are on __Windows__ [coolstar has done most all the hard work](https://coolstar.org/iOSToolchainOnWindows.html). And if you are on __Linux__ you can [use Darling to run OS X binaries](http://www.eswick.com/2014/03/building-ios-arm64-binaries-on-linux/), go for a [native toolchain](https://github.com/waneck/linux-ios-toolchain) or [grab a fully setup Theos with compiled toolchain](https://twitter.com/coolstarorg/status/496362772217597952).*  
+
 1. **GPT fdisk**  
 To resize **G**UID **P**artition **T**able we will be needing GPT fdisk.  
 `git clone git://git.code.sf.net/p/gptfdisk/code gptfdisk-code && cd gptfdisk-code`  
@@ -18,7 +19,7 @@ Link your Theos installation e.g. `ln -s /opt/theos theos`  and `make package in
 `git clone https://github.com/danzatt/attach-and-detach.git && cd attach-and-detach`  
 Link your Theos installation to theos e.g. `ln -s /opt/theos theos` and `make package install`.
 
-So firstly we must decide how much space we are going to dedicate to the other iOS (~1-1.5GB for system partition + min. 2-3GB for data partiton = ~4.5GB at least). I'll use 1GB for system and 5GB for data (6GB total). _ 6GB = 6 * 1024 ^ 3  = 6442450944_ bytes.  
+So firstly we must decide how much space we are going to dedicate to the other iOS (~1-1.5GB for system partition + min. 2-3GB for data partiton = ~4.5GB at least). I'll use 1GB for system and 5GB for data (6GB total). _6GB = 6 * 1024 ^ 3  = 6442450944_ bytes.  
 **EDIT: After writing this article I realised that 1GB system partition isn't enough even for iOS 4. You should use 1.5GB instead.**
 
 Let's check for free space:  
@@ -118,7 +119,26 @@ and return back to basic mode (`m <Enter>`):
 Expert command (? for help): m
 Command (? for help):
 ```
-Now we need to create two new partitions (keep the index and first sector default) `n <Enter> <Enter> <Enter>`
+Now we need to create two new partitions but firstly we must resize the partition table itself (it currently can hold 2 entries, we want 4).  
+Enter expert mode `x <Enter>`, resize table to 4 `s <Enter> 4 <Enter>` and return from expert mode `m <Enter>`:
+```
+Command (? for help): x
+
+Expert command (? for help): s
+Current partition table size is 2.
+Enter new size (64 up, default 128): 4 
+Caution: The partition table size should officially be 16KB or larger,
+which works out to 128 entries. In practice, smaller tables seem to
+work with most OSes, but this practice is risky. I'm proceeding with
+the resize, but you may want to reconsider this action and undo it.
+
+Adjusting GPT size from 4 to 64 to fill the sector
+
+Expert command (? for help): m
+```
+
+`gptfdisk` has rounded that it to 64 entires but since this isn't real GPT LwVM will remove all empty entires after reboot.  
+Now create the actual partitions `n <Enter> <Enter> <Enter>` (keep the index and first sector default):
 ```
 Command (? for help): n
 Partition number (3-4, default 3): 
