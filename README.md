@@ -57,13 +57,13 @@ write down the partition unique GUID (`1AFFD618-1C26-408E-975B-F20562CE7F9D` in 
 Command (? for help): d
 Partition number (1-4): 2
 ```
-Create new partition `n <Enter>`. Keep the first sector default `<Enter>`. 
+Create new partition `n <Enter>`. Keep the first sector default `<Enter>`.  
 ```
 Command (? for help): n
 Using 2
 First sector (176339-1947651, default = 176339) or {+-}size{KMGTP}: <Enter>
 ```
-Now comes the tricky part. If your size wasn't blocksize-aligned and hfs_resize complained (*[-] Adjusting size to xyz to match next block.*) you should use xyz in this calculation. To calculate the last sector we must divide the size we resized to (or size reported by hfs_resize) by blocksize (8192): 8068145152 / 8192 = 984881. And add it to the default first sector (176339 in my case): 984881 + 176339 = 1161220. 
+Now comes the tricky part. If your size wasn't blocksize-aligned and hfs_resize complained ("[-] Adjusting size to xyz to match next block.") you should use *xyz* in this calculation. To calculate the last sector we must divide the size we resized to (or size reported by hfs_resize) by blocksize (8192): 8068145152 / 8192 = 984881. And add it to the default first sector (176339 in my case): 984881 + 176339 = 1161220. 
 ```
 Last sector (176339-1947651, default = 1947651) or {+-}size{KMGTP}: 1161220
 Current type is 'Apple HFS/HFS+'
@@ -137,7 +137,7 @@ Adjusting GPT size from 4 to 64 to fill the sector
 Expert command (? for help): m
 ```
 
-`gptfdisk` has rounded that it to 64 entires but since this isn't real GPT LwVM will remove all empty entires after reboot.  
+`gptfdisk` has rounded that it to 64 entries but since this isn't real GPT LwVM will remove all empty entries after reboot.  
 Now create the actual partitions `n <Enter> <Enter> <Enter>` (keep the index and first sector default):
 ```
 Command (? for help): n
@@ -219,12 +219,12 @@ Toggle which attribute field (0-63, 64 or <Enter> to exit):
 Expert command (? for help):
 ```
 
-Now we can write our changes (`w <Enter>`). ** Check everything again (remember ?). LwVM does some bounds checking but it (I guess) won't prevent you from cutting the end of HFS filesystem (i.e. making GPT partition smaller than HFS on said partition). **
+Now we can write our changes (`w <Enter>`). **Check everything again (remember ?). LwVM does some bounds checking but it (I guess) won't prevent you from cutting the end of HFS filesystem (i.e. making GPT partition smaller than HFS on said partition).**
 
 Now reboot so that LwVM can do the hard work for us:   
 `poor-phone:~ root# reboot`
 
-After the system boots up you can run `gptfdisk /dev/rdisk0s1` again and `p <Enter> q <Enter>` to see if our changes have been applied. And also if new devices are there:
+After the system boots up you can run `gptfdisk /dev/rdisk0s1` again and `p <Enter> q <Enter>` to see if our changes have been applied. Also check if new devices are there:
 ```
 poor-phone:~ root# ls /dev/disk0s1*
 /dev/disk0s1  /dev/disk0s1s1  /dev/disk0s1s2  /dev/disk0s1s3  /dev/disk0s1s4
