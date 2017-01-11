@@ -233,9 +233,13 @@ poor-phone:~ root# ls /dev/disk0s1*
 ```
 If they aren't there repeat the whole process.
 
-Create HFS on the new partitions:  
+~~Create HFS on the new partitions:  
 `newfs_hfs -s -b 8192 -J 8192k -v System /dev/rdisk0s1s3`  
-`newfs_hfs -s -b 8192 -J 8192k -v Data /dev/rdisk0s1s4`
+`newfs_hfs -s -b 8192 -J 8192k -v Data /dev/rdisk0s1s4`~~
+
+This is [reportedly wrong](https://twitter.com/nyan_satan/status/705360377538854912) you should instead do ([according to restore log](https://www.theiphonewiki.com/wiki/IPhone_Restore_Procedure#Create_Filesystem_Partitions_.28create_filesystem_partitions.29)):  
+`/sbin/newfs_hfs -s -v System -b 8192 -n a=8192,c=8192,e=8192 /dev/rdisk0s1s3`  
+`/sbin/newfs_hfs -s -v System -b 8192 -n a=8192,c=8192,e=8192 /dev/rdisk0s1s4`  
   
 Now we can copy the rootfs to the newly created partitions. Firstly we need a copy of IPSW of the iOS we want to dualboot. You can get the link at [ipsw.me](https://ipsw.me/). I'll use 4.3.3. Go to [the iPhone Wiki](https://www.theiphonewiki.com/wiki/Firmware_Keys) and find the version you've downloaded (make sure you get the keys for the right model). Extract the rootfs (the exact filename is on the iPhone Wiki) and decrypt it using [VFDecrypt](https://www.theiphonewiki.com/wiki/VFDecrypt):  
 `vfdecrypt -k 246f17ec6660672b3207ece257938704944a83601205736409b61fc3565512559abd0f82 -i 038-1423-003.dmg -o 4_3_3_rootfs.dmg`  
